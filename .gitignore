@@ -1,3 +1,9 @@
 *txt
 *.csv
 *.zip
+.vector_cache
+6B.100.dat
+6B.100_idx.pkl
+6B.100_words.pkl
+Bi_attention.pth
+.data
