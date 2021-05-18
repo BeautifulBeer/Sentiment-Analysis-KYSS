@@ -3,4 +3,5 @@ paper/
 
 /**/.ipynb_checkpoints/
 /**/submission.csv
-
+/**/*.pt
+/**/*.pth
