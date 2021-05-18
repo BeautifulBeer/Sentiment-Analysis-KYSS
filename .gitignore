@@ -1,7 +1,15 @@
+*.txt
+*.pkl
+*.pth
+.vector_cache/
+
+/**/*.bin
 /**/.data/
 paper/
 
 /**/.ipynb_checkpoints/
 /**/submission.csv
+/**/**.csv
+
 /**/*.pt
 /**/*.pth
