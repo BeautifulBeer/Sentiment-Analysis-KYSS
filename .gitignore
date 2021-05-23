@@ -1,9 +1,3 @@
-/**/.data/
-paper/
-
-/**/.ipynb_checkpoints/
-/**/submission.csv
-
 *.txt
 *.pkl
 *.pth
@@ -16,3 +10,6 @@ paper/
 /**/.ipynb_checkpoints/
 /**/submission.csv
 /**/**.csv
+
+/**/*.pt
+/**/*.pth
