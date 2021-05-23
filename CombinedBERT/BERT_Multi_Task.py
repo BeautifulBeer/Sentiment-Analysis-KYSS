@@ -19,7 +19,7 @@ get_ipython().system('pip3 install tqdm')
 get_ipython().system('pip3 install pathlib')
 
 
-# In[ ]:
+# In[33]:
 
 
 import re
@@ -61,7 +61,7 @@ configs = {
     },
     'task' : {
         SENTIMENT_LABEL : {
-            'train_file' : 'sentence-classification/train_final.csv',
+            'train_file' : 'sentence-classification/train_plus.csv',
             'test_file' : 'sentence-classification/eval_final_open.csv',
             'train_valid_frac' : 0.8,
             'out_features' : 5,
@@ -132,7 +132,7 @@ torch.cuda.empty_cache()
 
 # ## Preprocessing Dataset
 
-# In[ ]:
+# In[53]:
 
 
 class ClassificationDataset(Dataset):
@@ -147,7 +147,7 @@ class ClassificationDataset(Dataset):
         self.sentences = df['Sentence'].to_numpy()
         self.is_train = is_train
         if self.is_train:
-            self.targets = df['Category'].to_numpy()
+            self.targets = df['Sentiment'].to_numpy()
         self.tokenizer = tokenizer
         self.max_len = max_len
         
@@ -197,14 +197,10 @@ def load_csv_data(configs, seed):
 
     for task in configs['task']:
         raw_data = pd.read_csv(data_dir.joinpath(configs['task'][task]['train_file']))
-        if task == 'imdb':
-            raw_data.rename(columns = {'Phrase': 'Sentence', 'Sentiment': 'Category'}, inplace=True)
         train_data[task] = raw_data.sample(frac=configs['task'][task]['train_valid_frac'], random_state=seed)
         valid_data[task] = raw_data.drop(train_data[task].index)
         if 'test_file' in configs['task'][task]:
             test_data[task] = pd.read_csv(data_dir.joinpath(configs['task'][task]['test_file']))
-            if task == 'imdb':
-                test_data[task].rename(columns = {'Phrase': 'Sentence', 'Sentiment': 'Category'}, inplace=True)
     
     return train_data, valid_data, test_data
 
@@ -284,7 +280,7 @@ def convert_name_to_func(name):
 
 # ## Define model, Train, Valid, Prediction
 
-# In[ ]:
+# In[54]:
 
 
 class SentimentModel(nn.Module):
@@ -460,7 +456,7 @@ def print_model_results(phase, epoch, accuracy, losses):
 
 # ### Load Dataset
 
-# In[ ]:
+# In[55]:
 
 
 RANDOM_SEED = 884532
@@ -468,7 +464,7 @@ RANDOM_SEED = 884532
 torch.manual_seed(RANDOM_SEED)
 np.random.seed(RANDOM_SEED)
 
-max_len = 100
+max_len = 512
 batch_size = 8
 
 train_data, valid_data, test_data = load_csv_data(configs, RANDOM_SEED)
@@ -493,7 +489,7 @@ test_loader = get_data_loader('Test', test_data, tokenizer, max_len, batch_size,
 
 model = SentimentModel(bert_model, configs, 0.1)
 
-epochs = 10
+epochs = 1
 total_steps = len(train_loader) * epochs
 learning_rate = 2e-5
 
