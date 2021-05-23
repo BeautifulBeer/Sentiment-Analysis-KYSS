@@ -111,16 +111,17 @@ else:
 Path(checkpoint_dir).mkdir(parents=False, exist_ok=True)
 
 # Load pretrained model
-PRETRAINED_MODEL = 'bert-base-cased'
+# PRETRAINED_MODEL = 'bert-base-cased'
+PRETRAINED_MODEL = 'roberta-base'
 
 if re.compile('^robert').match(PRETRAINED_MODEL):
-    from transfomers import RobertaModel, RobertaTokenizer, AdamW
+    from transformers import RobertaModel, RobertaTokenizer, AdamW
     
     tokenizer = RobertaTokenizer.from_pretrained(PRETRAINED_MODEL)
     bert_model = RobertaModel.from_pretrained(PRETRAINED_MODEL)
 
 elif re.compile('^bert').match(PRETRAINED_MODEL):
-    from transfomers import BertTokenizer, BertModel, AdamW
+    from transformers import BertTokenizer, BertModel, AdamW
 
     tokenizer = BertTokenizer.from_pretrained(PRETRAINED_MODEL)
     bert_model = BertModel.from_pretrained(PRETRAINED_MODEL)
@@ -135,12 +136,12 @@ torch.cuda.empty_cache()
 
 
 class ClassificationDataset(Dataset):
-  '''
+    '''
     Preprocessing dataframe to dataset. CSV should have two columns : "Sentence", "Category"
     :params
       df: dataframe loaded from csv
       task: value for each task - reference class Task(Enum)
-  '''
+    '''
     def __init__(self, df, task, tokenizer, max_len, is_train):
         self.task = task
         self.sentences = df['Sentence'].to_numpy()
@@ -185,11 +186,11 @@ class ClassificationDataset(Dataset):
             }
 
 def load_csv_data(configs, seed):
-  '''
+    '''
     Return dictionary of dataframes for each task from csv
     :return
       dict, dict, dict: train, valid, test dataset is returned. Task label is key (e.g. SENTIMENT_LABEL)
-  '''
+    '''
     train_data = {}
     valid_data = {}
     test_data = {}
@@ -208,9 +209,9 @@ def load_csv_data(configs, seed):
     return train_data, valid_data, test_data
 
 def print_dataset_configs(configs, train, valid, test):
-  '''
+    '''
     Print overview of preprocessed dataset
-  '''
+    '''
     for task in train:
         print(f'{task} dataset')
         print(f'='*25)
@@ -225,11 +226,11 @@ def print_dataset_configs(configs, train, valid, test):
         print('')
 
 def get_data_loader(phase, task_df, tokenizer, max_len, batch_size, is_train, shuffle):
-  '''
+    '''
     Get an entire dataloader. Each dataset of a task is preprocessed under the same conditions (e.g. batch_size)
     :params
       task_df: dataset for each task, dataframe
-  '''
+    '''
     total_dataset = []
     
     for task in task_df:
@@ -287,10 +288,10 @@ def convert_name_to_func(name):
 
 
 class SentimentModel(nn.Module):
-  '''
+    '''
     Multi-task learning is applied
     fc_sent, fc_im, fc_sarc is fully connected layer of each task and train separately. (share BERT layer)
-  '''
+    '''
     def __init__(self, bert, configs, dropout_p):
         super(SentimentModel, self).__init__()
         self.bert = bert
@@ -317,11 +318,11 @@ class SentimentModel(nn.Module):
             )
         
     def forward(self, input_ids, attention_mask, target_task):
-    '''
-      forward for each task
-      :params
-        target_task: task label(string)
-    '''
+        '''
+          forward for each task
+          :params
+            target_task: task label(string)
+        '''
         result = self.bert(
             input_ids = input_ids,
             attention_mask = attention_mask
