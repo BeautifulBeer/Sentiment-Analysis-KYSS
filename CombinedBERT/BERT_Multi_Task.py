@@ -19,7 +19,7 @@ get_ipython().system('pip3 install tqdm')
 get_ipython().system('pip3 install pathlib')
 
 
-# In[33]:
+# In[ ]:
 
 
 import re
@@ -36,6 +36,11 @@ from tqdm.auto import tqdm
 from enum import Enum
 from pprint import pprint
 from torch.utils.data import DataLoader, Dataset
+
+RANDOM_SEED = 42
+# For same result
+torch.manual_seed(RANDOM_SEED)
+np.random.seed(RANDOM_SEED)
 
 # Label for Task
 SENTIMENT_LABEL = 'sentiment'
@@ -132,7 +137,7 @@ torch.cuda.empty_cache()
 
 # ## Preprocessing Dataset
 
-# In[53]:
+# In[ ]:
 
 
 class ClassificationDataset(Dataset):
@@ -280,7 +285,7 @@ def convert_name_to_func(name):
 
 # ## Define model, Train, Valid, Prediction
 
-# In[54]:
+# In[ ]:
 
 
 class SentimentModel(nn.Module):
@@ -456,16 +461,11 @@ def print_model_results(phase, epoch, accuracy, losses):
 
 # ### Load Dataset
 
-# In[55]:
+# In[ ]:
 
-
-RANDOM_SEED = 884532
-# For same result
-torch.manual_seed(RANDOM_SEED)
-np.random.seed(RANDOM_SEED)
 
 max_len = 512
-batch_size = 8
+batch_size = 16
 
 train_data, valid_data, test_data = load_csv_data(configs, RANDOM_SEED)
 
@@ -489,7 +489,7 @@ test_loader = get_data_loader('Test', test_data, tokenizer, max_len, batch_size,
 
 model = SentimentModel(bert_model, configs, 0.1)
 
-epochs = 1
+epochs = 40
 total_steps = len(train_loader) * epochs
 learning_rate = 2e-5
 
