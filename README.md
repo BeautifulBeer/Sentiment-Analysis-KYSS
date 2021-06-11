@@ -53,6 +53,9 @@ The fine-grained sentiment is analyzed on a given movie review. The overall scor
 - TM ([train_IM.csv](https://postechackr-my.sharepoint.com/:x:/g/personal/ywshin_postech_ac_kr/EShwz4bT9yRPl8i0O82Ir0wBAffk-aOU9fRj1L4u5e2yiA?e=eCYgUD)): IMDB Movie Review (50,000)
 - RS ([train_sarcasm.csv](https://postechackr-my.sharepoint.com/:x:/g/personal/ywshin_postech_ac_kr/EUEeGjRtw_1BsxqmqvOhaYkBRpPSMDPDZoi-jvjkNmVWOA?e=eiXbPZ)): Reddit-Sarcasm (100,000)
 
+## Experiment & Results
+![results](https://github.com/BeautifulBeer/kyss/blob/develop/results/result.png)
+
 ## Conclusion
 The generalization is key issue in NLP task. In this project, active dropout and multi-task learning is applied to regularize the model and the effect is transparent, it improves accuracy compared to the baseline model. In addition, the extended dataset and related techniques, domain adaptation, domain randomization and big transfer learning also effective to increase accuracy. Standalone application of each method is effective, but, additional improvement is obtained with combined application with it.
 
