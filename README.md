@@ -1,5 +1,5 @@
 # KYSS
-Sentence classification (sentimental analysis)
+Sentiment analysis project, which is conducted during AIGS538, POSTECH.
 
 ## Training Notebooks & scripts
 You should change the configs("EDIT" part) in the code in the python files.
@@ -22,10 +22,13 @@ Finetune RoBERT model using AA dataset. First finetuning was done on the RK data
 - RoBERT/robert_colab_ver_domain_finetune.py: Finetune with train_plus.csv/train_final.csv
 - RoBERT/robert_colab_ver_domain_finetune_active_dropout.py: Finetune with train_plus.csv/train_final.csv. Apply active dropout when finetuning
 
----
+### Multi-Task Learning
 
-## Introduction
-The fine-grained sentiment is analyzed on a given movie review. The overall score of user is predicted using user’s review comment in range of 0 to 4. At the initial stage of project, the given dataset is too small, so, the model (BERT) tends to overfit. To overcome this overfitting, the additional dataset (Rotten) and pre-trained model (Roberta) is applied. In addition, lack of generalization is still observed, so, two main approaches are applied: Regularization and extended dataset. These two techniques separately applied to achieve top-score in Kaggle competition and finally the highest score (71.075%) is achieved with an ensemble methods.
+Train a single RoBERTa model for several similar tasks such as SST-5, SST-2 etc. After training step, to focus on the real domain(Kaggle competition), fine-tuning is applied using the K dataset. Active dropout is used to improve generalization performance.
+
+- Multi_Task/RoBERTa_Multi_Task.ipynb : RK, TM, RS, AM are for multi-task learning, K is for fine-tuning
+
+---
 
 ## Method
 - RoBERT
